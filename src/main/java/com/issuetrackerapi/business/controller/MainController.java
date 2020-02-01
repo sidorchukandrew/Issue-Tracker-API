@@ -20,7 +20,6 @@ import com.issuetrackerapi.data.entity.User;
 
 @Controller
 @RequestMapping(path="/api")
-@CrossOrigin(origins = "http://localhost:4200")
 public class MainController {
 	
 	@Autowired
