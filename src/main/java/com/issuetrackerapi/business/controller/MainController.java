@@ -1,10 +1,15 @@
 package com.issuetrackerapi.business.controller;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.issuetrackerapi.business.service.IssueService;
@@ -36,45 +41,34 @@ public class MainController {
 	
 	@GetMapping(path="/users")
 	@ResponseBody
-	public  Iterable<User> getAllUsers() {
-		return userService.getAllUsers();
-	}
+	@PreAuthorize("hasAuthority('create_profile')")
+	public  Iterable<User> getAllUsers() { return userService.getAllUsers(); }
 	
 	@GetMapping(path="/severities")
 	@ResponseBody
-	public Iterable<Severity> getAllSeverities() {
-		return severityService.getSeverities();
-	}
+	public Iterable<Severity> getAllSeverities() { return severityService.getSeverities(); }
 	
 	@GetMapping(path="/statuses")
 	@ResponseBody
-	public Iterable<Status> getAllStatuses() {
-		return statusService.getStatuses();
-	}
+	public Iterable<Status> getAllStatuses() { return statusService.getStatuses(); }
 	
 	@GetMapping(path ="/issues")
-	public @ResponseBody Iterable<Issue> getAllIssues() {
-		return issueService.getAllIssues();
-	}
+	@PreAuthorize("hasAuthority('create_profile')")
+	public @ResponseBody Iterable<Issue> getAllIssues() { return issueService.getAllIssues(); }
 	
 	@GetMapping(path = "/issuetest")
 	@ResponseBody
-	public Iterable<IssueProjection> getIssues() {
-		return issueService.getIssueTest();
+	public Iterable<IssueProjection> getIssues() { return issueService.getIssueTest(); }
+	
+	@GetMapping(path = "/issue")
+	@ResponseBody
+	@PreAuthorize("hasAuthority('create_profile')")
+	public Optional<Issue> getIssueById(@RequestParam long id) { return issueService.getIssueById(id); }
+	
+	@PostMapping(path = "/issue")
+	@PreAuthorize("hasAuthority('create_profile')")
+	public void saveIssue(@RequestBody Issue issue) {
+		System.out.println(issue.getReporter());
 	}
-
-//	@GetMapping(path="/issue")
-//	@ResponseBody
-//	public Optional<Issue> getIssueById(@RequestParam String id) {
-//		Long idAsNum = Long.parseLong(id);
-//		return issueService.getIssueById(idAsNum);
-//	}
-//	
-	
-//	@PostMapping(path = "/newissue")
-//	public void newIssue(@RequestBody Issue issue) {
-//		issueService.createNewIssues(issue);
-//	}
-	
 	
 }

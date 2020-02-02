@@ -1,5 +1,7 @@
 package com.issuetrackerapi.business.service;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,9 +23,9 @@ public class IssueService {
 		return issueRepository.getIssuesTest();
 	}
 	
-//	public Optional<Issue> getIssueById(Long id) {
-//		return issueRepository.findById(id);
-//	}
+	public Optional<Issue> getIssueById(Long id) {
+		return issueRepository.findById(id);
+	}
 //	
 //	public void createNewIssues(Issue issue) {
 //		issueRepository.save(issue);
