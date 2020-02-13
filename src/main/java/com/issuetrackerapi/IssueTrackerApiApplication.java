@@ -13,7 +13,5 @@ public class IssueTrackerApiApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(IssueTrackerApiApplication.class, args);
 	}
-	
-	// STACK IS Java SE for the server
 
 }

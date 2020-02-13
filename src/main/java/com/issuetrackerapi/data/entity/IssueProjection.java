@@ -12,6 +12,7 @@ public interface IssueProjection {
 	public UserProjection getReporter();
 	public StatusProjection getStatus();
 	public SeverityProjection getSeverity();
+	public long getId();
 	
 //	public long getId() {
 //		return id;
