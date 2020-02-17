@@ -3,11 +3,11 @@ package com.issuetrackerapi.business.controller;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,7 +18,6 @@ import com.issuetrackerapi.business.service.IssueService;
 import com.issuetrackerapi.business.service.SeverityService;
 import com.issuetrackerapi.business.service.StatusService;
 import com.issuetrackerapi.business.service.UserService;
-import com.issuetrackerapi.data.entity.Issue;
 import com.issuetrackerapi.data.entity.IssueProjection;
 import com.issuetrackerapi.data.entity.IssueSkeleton;
 import com.issuetrackerapi.data.entity.Severity;
@@ -87,6 +86,13 @@ public class MainController {
 	@PostMapping(path = "/issues")
 	public String saveIssue(@RequestBody IssueSkeleton issue) {
 		issueService.saveIssue(issue);
+		return "OK";
+	}
+	
+	@PutMapping(path = "/issue")
+	public String updateIssue(@RequestParam long id, @RequestBody IssueSkeleton issue) {
+//		System.out.println("Put accessed");
+		issueService.updateIssue(issue); 
 		return "OK";
 	}
 

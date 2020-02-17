@@ -21,67 +21,111 @@ public class IssueService {
 
 	@Autowired
 	private IssueRepository issueRepository;
-	
+
 	@Autowired
 	private UserRepository userRepository;
-	
+
 	@Autowired
 	private StatusRepository statusRepository;
-	
+
 	@Autowired
 	private SeverityRepository severityRepository;
-	
+
 	public Iterable<Issue> getAllIssues() {
 		return issueRepository.findAll();
 	}
-	
+
 	public Iterable<IssueProjection> getIssues() {
 		return issueRepository.getIssues();
 	}
-	
+
 	public Optional<IssueProjection> getIssueById(Long id) {
 		return issueRepository.getById(id);
 	}
-	
+
 	public void saveIssue(IssueSkeleton issueSkeleton) {
-		
+
 		Issue issueToSave = new Issue();
-		
-		if(issueSkeleton.getDateCreated() != null)
+
+		if (issueSkeleton.getDateCreated() != null)
 			issueToSave.setDateCreated(issueSkeleton.getDateCreated());
-		if(issueSkeleton.getDateDue() != null)
+		if (issueSkeleton.getDateDue() != null)
 			issueToSave.setDateDue(issueSkeleton.getDateDue());
-	
+
 		issueToSave.setResolved(issueSkeleton.isResolved());
-		
-		if(issueSkeleton.getStatus().endsWith("e"))
+
+		if (issueSkeleton.getStatus().endsWith("e"))
 			issueSkeleton.setStatus(issueSkeleton.getStatus() + "d");
-		else if(!issueSkeleton.getStatus().endsWith("ed"))
+		else if (!issueSkeleton.getStatus().endsWith("ed"))
 			issueSkeleton.setStatus(issueSkeleton.getStatus() + "ed");
-		
-		if(issueSkeleton.getStatus() != null) {
+
+		if (issueSkeleton.getStatus() != null) {
 			Status status = statusRepository.findByName(issueSkeleton.getStatus());
 			issueToSave.setStatus(status);
 		}
-		
-		if(issueSkeleton.getSeverity() != null) {
+
+		if (issueSkeleton.getSeverity() != null) {
 			Severity severity = severityRepository.findByName(issueSkeleton.getSeverity());
 			issueToSave.setSeverity(severity);
 			System.out.println(severity.getId() + " : " + severity.getName());
 		}
-		
-		if(issueSkeleton.getReporter() != null) {
+
+		if (issueSkeleton.getReporter() != null) {
 			User reporter = userRepository.findByName(issueSkeleton.getReporter());
 			issueToSave.setReporter(reporter);
 		}
-		
-		if(issueSkeleton.getAssignedTo() != null) {
+
+		if (issueSkeleton.getAssignedTo() != null) {
+			User assignee = userRepository.findByName(issueSkeleton.getAssignedTo());
+			issueToSave.setAssignedTo(assignee);
+		}
+
+		issueToSave.setIssue(issueSkeleton.getIssue());
+
+		issueRepository.save(issueToSave);
+	}
+
+	public void updateIssue(IssueSkeleton issueSkeleton) {
+		System.out.println("Entered here");
+		Issue issueToSave = new Issue();
+
+		if (issueSkeleton.getDateCreated() != null)
+			issueToSave.setDateCreated(issueSkeleton.getDateCreated());
+		if (issueSkeleton.getDateDue() != null)
+			issueToSave.setDateDue(issueSkeleton.getDateDue());
+
+		issueToSave.setResolved(issueSkeleton.isResolved());
+
+		if (issueSkeleton.getStatus().endsWith("e"))
+			issueSkeleton.setStatus(issueSkeleton.getStatus() + "d");
+		else if (!issueSkeleton.getStatus().endsWith("ed"))
+			issueSkeleton.setStatus(issueSkeleton.getStatus() + "ed");
+
+		if (issueSkeleton.getStatus() != null) {
+			Status status = statusRepository.findByName(issueSkeleton.getStatus());
+			issueToSave.setStatus(status);
+		}
+
+		if (issueSkeleton.getSeverity() != null) {
+			Severity severity = severityRepository.findByName(issueSkeleton.getSeverity());
+			issueToSave.setSeverity(severity);
+			System.out.println(severity.getId() + " : " + severity.getName());
+		}
+
+		if (issueSkeleton.getReporter() != null) {
+			User reporter = userRepository.findByName(issueSkeleton.getReporter());
+			issueToSave.setReporter(reporter);
+		}
+
+		if (issueSkeleton.getAssignedTo() != null) {
 			User assignee = userRepository.findByName(issueSkeleton.getAssignedTo());
 			issueToSave.setAssignedTo(assignee);
 		}
 		
+		issueToSave.setId(issueSkeleton.getId());
+
 		issueToSave.setIssue(issueSkeleton.getIssue());
-		
+
 		issueRepository.save(issueToSave);
 	}
 }
